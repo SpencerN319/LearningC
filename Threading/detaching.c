@@ -18,12 +18,17 @@ int main() {
 	exit(1);
   }
 
-  if (pthread_join(producer_thread, &ret) != 0) {
-	perror("pthread_join() error");
-	exit(3);
-  }
+  pthread_detach(producer_thread);
 
-  printf("thread exited with '%s'\n", ret);
+  printf("detatched from producer.\n");
+
+//  if (pthread_join(producer_thread, &ret) != 0) {
+//	perror("pthread_join() error");
+//	exit(3);
+//  }
+  printf("return value is: '%s'\n", ret);
+
+  printf("Main thread exited\n");
 
   return 0;
 }
