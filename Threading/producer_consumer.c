@@ -19,14 +19,14 @@ typedef struct {
 void *consumer_routine(void *arg);
 void *producer_routine(void *arg);
 
-long g_num_prod;
+long g_num_prod = 1;
 pthread_mutex_t g_num_prod_lock;
 
 int main() {
 	queue_t queue;
 	pthread_t producer_thread, consumer_thread;
 	void *thread_return = NULL;
-	int result = 0;
+	int result;
 
 	memset(&queue, 0, sizeof(queue));
 	pthread_mutex_init(&queue.lock, NULL);
@@ -34,12 +34,9 @@ int main() {
 
 	pthread_create(&producer_thread, NULL, producer_routine, &queue);
 
-	pthread_mutex_lock(&g_num_prod_lock);
-	g_num_prod = 1;
-	pthread_mutex_unlock(&g_num_prod_lock);
-
 	pthread_detach(producer_thread);
 
+	pthread_create(&consumer_thread, NULL, consumer_routine, &queue);
 	pthread_create(&consumer_thread, NULL, consumer_routine, &queue);
 
 	result = pthread_join(consumer_thread, &thread_return);
@@ -59,11 +56,14 @@ void *consumer_routine(void *arg) {
 	queue_node_t *prev_node_p = NULL;
 	long count = 0;
 
-	printf("Consumer thread started with thread id %lu\n", pthread_self());
+	printf("Consumer thread started with tid %lu, and queue address: %lu\n",
+				 pthread_self(), queue_p);
 
 	pthread_mutex_lock(&queue_p->lock);
 	pthread_mutex_lock(&g_num_prod_lock);
 	while (queue_p->front != NULL || g_num_prod > 0) {
+		pthread_mutex_unlock(&g_num_prod_lock);
+
 		if (queue_p->front != NULL) {
 			prev_node_p = queue_p->front;
 
@@ -73,14 +73,16 @@ void *consumer_routine(void *arg) {
 				queue_p->front->next->prev = NULL;
 
 			queue_p->front = queue_p->front->next;
-			pthread_mutex_unlock(&queue_p->lock);
 
 			printf("consumer acquired lock, removing %c from the queue.\n",
 						 prev_node_p->c);
 			free(prev_node_p);
+			pthread_mutex_unlock(&queue_p->lock);
+
 			++count;
+
 		} else {
-			pthread_mutex_unlock(&g_num_prod_lock);
+
 			pthread_mutex_unlock(&queue_p->lock);
 			sched_yield();
 		}

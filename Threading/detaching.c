@@ -6,42 +6,44 @@
 // Declare the method so that you can keep the main function at the top and
 // instantiate it later.
 void *producer(void *arg);
+pthread_mutex_t lock;
 
 int main() {
-  void *ret;
-  pthread_t producer_thread;
+	pthread_t producer_thread;
+	pthread_mutex_init(&lock, NULL);
+	int *ptr = malloc(sizeof(int));
+	int *ptr_ptr = ptr;
 
-  printf("Main thread starting with id: %lu\n", &producer_thread);
+	printf("prt = %d\n", *ptr);
 
-  if (pthread_create(&producer_thread, NULL, producer, "Hello from main.")) {
-	perror("pthread_create() error");
-	exit(1);
-  }
+	free(ptr);
 
-  pthread_detach(producer_thread);
+	printf("prt = %d\n", *ptr);
+	printf("prt_ptr = %d\n", *ptr_ptr);
 
-  printf("detatched from producer.\n");
+	printf("Main thread starting with id: %lu\n", &producer_thread);
 
-//  if (pthread_join(producer_thread, &ret) != 0) {
-//	perror("pthread_join() error");
-//	exit(3);
-//  }
-  printf("return value is: '%s'\n", ret);
+	if (pthread_create(&producer_thread, NULL, producer, "Hello from main.")) {
+		perror("pthread_create() error");
+		exit(1);
+	}
 
-  printf("Main thread exited\n");
+	pthread_detach(producer_thread);
 
-  return 0;
+	printf("detatched from producer.\n");
+
+	pthread_mutex_lock(&lock);
+	printf("Main thread exiting\n");
+	pthread_mutex_unlock(&lock);
+
+	return 0;
 }
 
 // Instantiating the thread method
 void *producer(void *arg) {
-  char *ret;
-  printf("thread() entered with arg: '%s'\n", arg);
-  if ((ret = (char *)malloc(20)) == NULL) {
-	perror("maccloc() error");
-	exit(2);
-  }
-  strcpy(ret, "This is a test");
-  pthread_exit(ret);
+	pthread_mutex_lock(&lock);
+	printf("message from detached thread.\n");
+	pthread_mutex_unlock(&lock);
+	pthread_exit(0);
 }
 
