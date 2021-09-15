@@ -7,13 +7,15 @@ set(CMAKE_C_STANDARD 11)
 #add_executable(LearningC Introductory/main.c)
 #add_executable(LearningC Introductory/yeild.c)
 
-#Threads
+#Pointers
 #add_executable(LearningC pointers/changing_pointer_values.c)
+add_executable(LearningC pointers/array_pointers.c)
+
 
 #Threads
 #add_executable(LearningC Threading/simple_thread.c)
 #add_executable(LearningC Threading/multi_thread.c)
-add_executable(LearningC Threading/detaching.c)
+#add_executable(LearningC Threading/detaching.c)
 #add_executable(LearningC Threading/exit_threads.c)
 #add_executable(LearningC Threading/join_main.c)
 #add_executable(LearningC Threading/thread_ids.c)
