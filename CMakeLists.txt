@@ -8,8 +8,9 @@ set(CMAKE_C_STANDARD 11)
 #add_executable(LearningC Introductory/yeild.c)
 
 #Pointers
-#add_executable(LearningC pointers/arrays.c pointers/2d_array.c)
 #add_executable(LearningC pointers/changing_pointer_values.c)
+#add_executable(LearningC pointers/array_pointers.c)
+add_executable(LearningC pointers/pointer_copies.c)
 
 #Threads
 #add_executable(LearningC Threading/simple_thread.c)
