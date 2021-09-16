@@ -19,7 +19,6 @@ add_executable(LearningC pointers/pointer_copies.c)
 #add_executable(LearningC Threading/exit_threads.c)
 #add_executable(LearningC Threading/join_main.c)
 #add_executable(LearningC Threading/thread_ids.c)
-
 #add_executable(LearningC Threading/producer_consumer.c)
 #add_executable(LearningC Threading/mutex.c)
 #add_executable(LearningC Threading/passing_values.c)
