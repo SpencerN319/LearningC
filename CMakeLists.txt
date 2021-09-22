@@ -11,7 +11,9 @@ set(CMAKE_C_STANDARD 11)
 #add_executable(LearningC pointers/changing_pointer_values.c)
 #add_executable(LearningC pointers/array_pointers.c)
 #add_executable(LearningC pointers/pointer_copies.c)
-add_executable(LearningC Introductory/dynamic_arrays.c)
+#add_executable(LearningC Introductory/dynamic_arrays.c)
+add_executable(LearningC  Introductory/bitshift.c)
+#add_executable(LearningC pointers/static_pointers.c)
 
 
 #Threads
